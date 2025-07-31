@@ -37,6 +37,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseMiddleware<API.Middlewares.ExceptionMiddleware>();
+
 app.UseCors(policy =>
 {
     policy.AllowAnyHeader()
