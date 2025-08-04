@@ -1,4 +1,4 @@
-﻿using API.Entities;
+﻿using API.DTOs;
 using API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +9,14 @@ namespace API.Controllers;
 public class MembersController(IMemberRepository memberRepository) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
+    public async Task<ActionResult<IReadOnlyList<MemberDto>>> GetMembers()
     {
         var members = await memberRepository.GetMembersAsync();
         return Ok(members);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Member>> GetMember(string id)
+    public async Task<ActionResult<MemberDto>> GetMember(string id)
     {
         var member = await memberRepository.GetMemberByIdAsync(id);
         if (member == null)
@@ -27,7 +27,7 @@ public class MembersController(IMemberRepository memberRepository) : BaseApiCont
     }
 
     [HttpGet("{id}/photos")]
-    public async Task<ActionResult<IReadOnlyList<Photo>>> GetMemberPhotos(string id)
+    public async Task<ActionResult<IReadOnlyList<PhotoDto>>> GetMemberPhotos(string id)
     {
         return Ok(await memberRepository.GetPhotosForMemberAsync(id));
     }
