@@ -36,6 +36,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         return await context.Members
             .Include(x => x.User)
+            .Include(x => x.Photos)
             .Select(x => new MemberDto
             {
                 Id = x.Id,
@@ -55,7 +56,14 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
                     Email = x.User.Email,
                     ImageUrl = x.User.ImageUrl,
                     Token = ""
-                }
+                },
+                Photos = x.Photos.Select(x => new PhotoDto()
+                {
+                    Id = x.Id,
+                    Url = x.Url,
+                    MemberId = x.MemberId,
+                    PublicId = x.PublicId,
+                }).ToList()
             }).SingleOrDefaultAsync(x => x.Id == memberId);
     }
 

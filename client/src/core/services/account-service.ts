@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class AccountService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
-  currenUser = signal<User | null>(null);
+  currentUser = signal<User | null>(null);
 
   register(creds: RegisterCreds) {
     return this.http.post<User>(this.baseUrl + 'account/register', creds).pipe(
@@ -34,11 +34,11 @@ export class AccountService {
 
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
-    this.currenUser.set(user);
+    this.currentUser.set(user);
   }
 
   logout() {
     localStorage.removeItem('user');
-    this.currenUser.set(null);
+    this.currentUser.set(null);
   }
 }

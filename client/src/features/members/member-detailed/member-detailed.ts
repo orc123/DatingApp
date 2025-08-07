@@ -27,7 +27,7 @@ export class MemberDetailed implements OnInit {
   protected title = signal<string | undefined>('Profile');
   protected isCurrentUser = computed(() => {
     return (
-      this.accountService.currenUser()?.id ===
+      this.accountService.currentUser()?.id ===
       this.route.snapshot.paramMap.get('id')
     );
   });

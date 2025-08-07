@@ -24,7 +24,7 @@
       </a>
     </div>
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-      @if (accountService.currenUser()) {
+      @if (accountService.currentUser()) {
       <a
         routerLink="/members"
         routerLinkActive="text-accent"
@@ -75,7 +75,7 @@
         </ul>
       </div>
 
-      @if (accountService.currenUser(); as user) {
+      @if (accountService.currentUser(); as user) {
       <div class="dropdown dropdown-end">
         <div
           tabindex="0"

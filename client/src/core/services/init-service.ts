@@ -13,7 +13,7 @@ export class InitService {
     if (!userString) return of(null);
 
     const user = JSON.parse(userString);
-    this.accountService.currenUser.set(user);
+    this.accountService.currentUser.set(user);
 
     return of(null);
   }
