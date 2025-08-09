@@ -20,7 +20,7 @@ public class PhotoRepository(AppDbContext context) : IPhotoRepository
         {
             Url = photoDto.Url,
             PublicId = photoDto.PublicId,
-            MemberId = photoDto.MemberId,
+            MemberId = photoDto.MemberId
         };
 
         if (member.ImageUrl == null)
@@ -35,6 +35,7 @@ public class PhotoRepository(AppDbContext context) : IPhotoRepository
 
         if (result > 0)
         {
+            photoDto.Id = photo.Id;
             return photoDto;
         }
         else
