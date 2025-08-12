@@ -26,6 +26,8 @@ builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
+builder.Services.AddScoped<LogUserActivity>();
+
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

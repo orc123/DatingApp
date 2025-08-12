@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Repositories;
 
@@ -7,7 +8,7 @@ public interface IMemberRepository
 {
     Task<bool> UpdateAsync(string memberId, MemberUpdateDto memberUpdateDto);
     Task<bool> SaveAllAsync();
-    Task<IReadOnlyList<MemberDto>> GetMembersAsync();
+    Task<PaginatedResult<MemberDto>> GetMembersAsync(MemberParams memberParams);
     Task<MemberDto?> GetMemberByIdAsync(string id);
     Task<IReadOnlyList<PhotoDto>> GetPhotosForMemberAsync(string memberId);
 

@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories;
@@ -67,22 +68,45 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
             }).SingleOrDefaultAsync(x => x.Id == memberId);
     }
 
-    public async Task<IReadOnlyList<MemberDto>> GetMembersAsync()
+    public async Task<PaginatedResult<MemberDto>> GetMembersAsync(MemberParams memberParams)
     {
-        return await context.Members.Select(x => new MemberDto
+
+        var query = context.Members.AsQueryable();
+
+        query = query.Where(x => x.Id != memberParams.CurrentMemberId);
+
+        if (memberParams.Gender != null)
         {
-            Id = x.Id,
-            DateOfBirth = x.DateOfBirth,
-            ImageUrl = x.ImageUrl,
-            DisplayName = x.DisplayName,
-            Created = x.Created,
-            LastActive = x.LastActive,
-            Gender = x.Gender,
-            Description = x.Description,
-            City = x.City,
-            Country = x.Country,
-        })
-            .ToListAsync();
+            query = query.Where(x => x.Gender == memberParams.Gender);
+        }
+
+        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MaxAge - 1));
+        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MinAge));
+
+        query = query.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+
+        query = memberParams.OrderBy switch
+        {
+            "created" => query.OrderByDescending(x => x.Created),
+            _ => query.OrderByDescending(x => x.LastActive)
+        };
+
+        var dto = query
+            .Select(x => new MemberDto
+            {
+                Id = x.Id,
+                DateOfBirth = x.DateOfBirth,
+                ImageUrl = x.ImageUrl,
+                DisplayName = x.DisplayName,
+                Created = x.Created,
+                LastActive = x.LastActive,
+                Gender = x.Gender,
+                Description = x.Description,
+                City = x.City,
+                Country = x.Country,
+            });
+
+        return await PaginationHelper.CreateAsync(dto, memberParams.PageNumber, memberParams.PageSize);
     }
 
     public async Task<IReadOnlyList<PhotoDto>> GetPhotosForMemberAsync(string memberId)
