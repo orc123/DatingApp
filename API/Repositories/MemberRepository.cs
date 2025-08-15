@@ -123,11 +123,6 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
                             .ToListAsync();
     }
 
-    public async Task<bool> SaveAllAsync()
-    {
-        return await context.SaveChangesAsync() > 0;
-    }
-
     public async Task<bool> UpdateAsync(string memberId, MemberUpdateDto memberUpdateDto)
     {
         var member = await context.Members.Include(x => x.User)

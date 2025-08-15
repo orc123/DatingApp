@@ -7,7 +7,6 @@ namespace API.Repositories;
 public interface IMemberRepository
 {
     Task<bool> UpdateAsync(string memberId, MemberUpdateDto memberUpdateDto);
-    Task<bool> SaveAllAsync();
     Task<PaginatedResult<MemberDto>> GetMembersAsync(MemberParams memberParams);
     Task<MemberDto?> GetMemberByIdAsync(string id);
     Task<IReadOnlyList<PhotoDto>> GetPhotosForMemberAsync(string memberId);

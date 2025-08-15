@@ -15,5 +15,7 @@ public class MemberDto
     public required string Country { get; set; }
 
     public List<PhotoDto> Photos { get; set; } = [];
+    public List<MemberLikeDto> LikedByMembers { get; set; } = [];
+    public List<MemberLikeDto> LikedMembers { get; set; } = [];
     public UserDto User { get; set; }
 }
