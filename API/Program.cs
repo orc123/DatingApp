@@ -28,6 +28,8 @@ builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
 builder.Services.AddScoped<LogUserActivity>();
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));

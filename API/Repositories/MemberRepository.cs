@@ -2,15 +2,16 @@
 using API.DTOs;
 using API.Entities;
 using API.Helpers;
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace API.Repositories;
 
 public class MemberRepository(AppDbContext context) : IMemberRepository
 {
-    public async Task<MemberDto?> GetMemberByIdAsync(string id)
-    {
-        return await context.Members
+    public async Task<MemberDto?> GetMemberByIdAsync(string id) =>
+        await context.Members
             .Select(x => new MemberDto
             {
                 Id = x.Id,
@@ -31,11 +32,9 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
                     PublicId = x.PublicId,
                 }).ToList()
             }).FirstOrDefaultAsync(x => x.Id == id);
-    }
 
-    public async Task<MemberDto?> GetMemberForUpdateAsync(string memberId)
-    {
-        return await context.Members
+    public async Task<MemberDto?> GetMemberForUpdateAsync(string memberId) =>
+          await context.Members
             .Include(x => x.User)
             .Include(x => x.Photos)
             .Select(x => new MemberDto
@@ -66,7 +65,6 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
                     PublicId = x.PublicId,
                 }).ToList()
             }).SingleOrDefaultAsync(x => x.Id == memberId);
-    }
 
     public async Task<PaginatedResult<MemberDto>> GetMembersAsync(MemberParams memberParams)
     {
@@ -109,19 +107,17 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
         return await PaginationHelper.CreateAsync(dto, memberParams.PageNumber, memberParams.PageSize);
     }
 
-    public async Task<IReadOnlyList<PhotoDto>> GetPhotosForMemberAsync(string memberId)
-    {
-       return await context.Members.Where(x => x.Id == memberId)
-                            .SelectMany(x => x.Photos)
-                            .Select(y => new PhotoDto
-                            {
-                                Id = y.Id,
-                                Url = y.Url,
-                                MemberId = y.MemberId,
-                                PublicId = y.PublicId,
-                            })
-                            .ToListAsync();
-    }
+    public async Task<IReadOnlyList<PhotoDto>> GetPhotosForMemberAsync(string memberId) => 
+        await context.Members.Where(x => x.Id == memberId)
+                             .SelectMany(x => x.Photos)
+                             .Select(y => new PhotoDto
+                             {
+                                 Id = y.Id,
+                                 Url = y.Url,
+                                 MemberId = y.MemberId,
+                                 PublicId = y.PublicId,
+                             })
+                             .ToListAsync();
 
     public async Task<bool> UpdateAsync(string memberId, MemberUpdateDto memberUpdateDto)
     {

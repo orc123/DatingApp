@@ -37,24 +37,20 @@ public class LikeRepository(AppDbContext context) : ILikeRepository
         return result;
     }
 
-    public async Task<IReadOnlyList<string>> GetCurrentMemberLikeIds(string memberId)
-    {
-        return await context.Likes
+    public async Task<IReadOnlyList<string>> GetCurrentMemberLikeIds(string memberId) =>
+        await context.Likes
             .Where(x => x.SourceMemberId == memberId)
             .Select(x => x.TargetMemberId)
             .ToListAsync();
-    }
 
-    public async Task<MemberLikeDto?> GetMemberLike(string sourceMemberId, string targetMemberId)
-    {
-        return await context.Likes
+    public async Task<MemberLikeDto?> GetMemberLike(string sourceMemberId, string targetMemberId) =>
+        await context.Likes
              .Select(x => new MemberLikeDto
              {
                  SourceMemberId = x.SourceMemberId,
                  TargetMemberId = x.TargetMemberId
              })
              .FirstOrDefaultAsync(x => x.SourceMemberId == sourceMemberId && x.TargetMemberId == targetMemberId);
-    }
 
     public async Task<PaginatedResult<MemberDto>> GetMemberLikes(LikesParam likesParam)
     {

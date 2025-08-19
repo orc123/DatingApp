@@ -17,5 +17,7 @@ public class MemberDto
     public List<PhotoDto> Photos { get; set; } = [];
     public List<MemberLikeDto> LikedByMembers { get; set; } = [];
     public List<MemberLikeDto> LikedMembers { get; set; } = [];
+    public List<MessageDto> MessagesSent { get; set; } = [];
+    public List<MessageDto> MessagesReceived { get; set; } = [];
     public UserDto User { get; set; }
 }
