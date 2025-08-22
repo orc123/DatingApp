@@ -33,6 +33,12 @@
       >
       <a routerLink="/lists" routerLinkActive="text-accent">List</a>
       <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+      <a
+        *appHasRole="['Admin', 'Moderator']"
+        routerLink="/admin"
+        routerLinkActive="text-accent"
+        >Admin</a
+      >
       }
       <a routerLink="/errors" routerLinkActive="text-accent">Errors</a>
     </nav>

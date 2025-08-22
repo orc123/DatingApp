@@ -4,5 +4,6 @@ namespace API.Services;
 
 public interface ITokenService
 {
-    string CreateToken(AppUser appUser);
+    Task<string> CreateToken(AppUser appUser);
+    string GenerateRefresherToken();
 }

@@ -4,6 +4,7 @@ export type User = {
   email: string;
   token: string;
   imageUrl?: string;
+  roles: string[];
 };
 
 export type LoginCreds = {
@@ -26,6 +27,6 @@ export class MemberParams {
   minAge = 18;
   maxAge = 100;
   pageNumber = 1;
-  pageSize = 5;
+  pageSize = 10;
   orderBy = 'lastActive';
 }
