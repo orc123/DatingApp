@@ -96,4 +96,51 @@ public class MessageRepository(AppDbContext context) : IMessageRepository
         var result = await context.SaveChangesAsync();
         return result;
     }
+
+    public async Task<bool> AddGroupAsync(GroupDto groupDto)
+    {
+        var groupEntity = new Group(groupDto.Name);
+        context.Groups.Add(groupEntity);
+        int result = await context.SaveChangesAsync();
+        return result > 0;
+    }
+
+    public async Task RemoveContectionAsync(string connectionId)
+        => await context.Connections
+            .Where(x => x.ConnectionId == connectionId)
+            .ExecuteDeleteAsync();
+
+    public async Task<ConnectionDto?> GetConnectionAsync(string connectionId) => await context.Connections
+            .Where(x => x.ConnectionId == connectionId)
+            .Select(x => new ConnectionDto()
+            {
+                ConnectionId = x.ConnectionId,
+                UserId = x.UserId
+            })
+            .FirstOrDefaultAsync();
+
+    public async Task<GroupDto?> GetMessageGroupAsync(string groupName)
+        => await context.Groups
+            .Include(x => x.Connections)
+            .Where(x => x.Name == groupName)
+            .Select(x => new GroupDto()
+            {
+                Name = x.Name,
+                Connections = x.Connections.Select(c => new ConnectionDto()
+                {
+                    ConnectionId = c.ConnectionId,
+                    UserId = c.UserId
+                }).ToList()
+            })
+            .FirstOrDefaultAsync();
+
+    public async Task<GroupDto?> GetGroupForConnectionAsync(string connectionId) 
+        => await context.Groups
+            .Include(x => x.Connections)
+            .Where(x => x.Connections.Any(c => c.ConnectionId == connectionId))
+            .Select(x => new GroupDto()
+            {
+                Name = x.Name
+            })
+            .FirstOrDefaultAsync();
 }

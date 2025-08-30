@@ -16,4 +16,10 @@ public interface IMessageRepository
     Task<IReadOnlyList<MessageDto>> GetMessageThreadAsync(string currentMemberId, string recipientId);
 
     Task<int> DeletePartAsync(MessageDto messageDto);
+
+    Task<bool> AddGroupAsync(GroupDto groupDto);
+    Task RemoveContectionAsync(string connectionId);
+    Task<ConnectionDto?> GetConnectionAsync(string connectionId);
+    Task<GroupDto?> GetMessageGroupAsync(string groupName);
+    Task<GroupDto?> GetGroupForConnectionAsync(string connectionId);
 }
